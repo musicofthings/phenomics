@@ -37,4 +37,3 @@ The deploy script builds the app and runs `wrangler deploy`.
 ### Notes
 
 - `wrangler.toml` runs the Vite build and uploads the `dist` folder as Worker assets.
-- SPA fallback routing is configured with `not_found_handling = "single-page-application"` in `wrangler.toml`.
