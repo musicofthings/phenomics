@@ -36,4 +36,4 @@ The deploy script builds the app and runs `wrangler deploy`.
 
 ### Notes
 
-- `wrangler.toml` runs the Vite build and uploads the `dist` folder as Worker assets.
+- `wrangler.toml` runs the Vite build and uploads the `dist` folder as Worker assets with explicit `html_handling`/`not_found_handling` set to `none` to avoid implicit redirect generation.
