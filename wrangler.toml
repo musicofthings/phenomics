@@ -1,0 +1,8 @@
+name = "phenomics"
+compatibility_date = "2026-04-16"
+
+[build]
+command = "pnpm build"
+
+[assets]
+directory = "./dist"
