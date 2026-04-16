@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Phenomics · In Vivo CAR T Field Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          serif: ["Lora", "Georgia", "serif"],
+          sans: ["Source Sans 3", "system-ui", "sans-serif"],
+        }
+      }
+    }
+  }
+</script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  * { box-sizing: border-box; }
+</style>
+</head>
+<body class="bg-white min-h-screen font-sans antialiased">
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const NAV_ITEMS = [
+  { label: "Overview", id: "overview" },
+  { label: "Platforms", id: "platforms" },
+  { label: "Programs", id: "programs" },
+  { label: "M&A", id: "mna" },
+  { label: "Scorecard", id: "scorecard" },
+  { label: "Takeaways", id: "takeaways" },
+];
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40);
+      const ids = NAV_ITEMS.map(n => n.id);
+      for (let i = ids.length - 1; i >= 0; i--) {
+        const el = document.getElementById(ids[i]);
+        if (el && el.getBoundingClientRect().top <= 120) { setActive(ids[i]); break; }
+      }
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur border-b border-stone-200 shadow-sm" : "bg-transparent"}`}>
+      <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+        <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded bg-blue-700 flex items-center justify-center">
+            <span className="text-white font-bold text-xs">Φ</span>
+          </div>
+          <span className="font-semibold text-stone-900 text-sm">Phenomics</span>
+          <span className="hidden sm:block text-stone-400 text-xs ml-1">· Field Intelligence</span>
+        </button>
+        <div className="hidden md:flex items-center gap-1">
+          {NAV_ITEMS.map(n => (
+            <button key={n.id} onClick={() => scrollToSection(n.id)}
+              className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${active === n.id ? "bg-blue-50 text-blue-700" : "text-stone-500 hover:text-stone-800 hover:bg-stone-100"}`}>
+              {n.label}
+            </button>
+          ))}
+        </div>
+        <button className="md:hidden text-stone-500 hover:text-stone-800" onClick={() => setMenuOpen(!menuOpen)}>
+          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            {menuOpen ? <path d="M6 18L18 6M6 6l12 12"/> : <path d="M3 12h18M3 6h18M3 18h18"/>}
+          </svg>
+        </button>
+      </div>
+      {menuOpen && (
+        <div className="md:hidden bg-white border-t border-stone-100 px-6 py-3 flex flex-col gap-1">
+          {NAV_ITEMS.map(n => (
+            <button key={n.id} onClick={() => { scrollToSection(n.id); setMenuOpen(false); }}
+              className="text-left px-3 py-2 rounded text-sm text-stone-600 hover:bg-stone-50">{n.label}</button>
+          ))}
+        </div>
+      )}
+    </nav>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="relative bg-white pt-28 pb-14 overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.025]"
+        style={{ backgroundImage: "radial-gradient(circle, #1e3a5f 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
+      <div className="max-w-3xl mx-auto px-6 relative">
+        <div className="flex flex-wrap items-center gap-3 mb-5">
+          <span className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block" />
+            Field Intelligence · April 2026
+          </span>
+          <span className="text-stone-400 text-xs">Oncology · Cell &amp; Gene Therapy</span>
+        </div>
+        <h1 className="font-serif text-4xl sm:text-5xl font-semibold text-stone-900 leading-tight mb-5">
+          In Vivo CAR T Cells:<br />
+          <span className="text-blue-700">The Drug That Builds<br />Itself Inside You</span>
+        </h1>
+        <p className="font-serif text-xl text-stone-500 italic leading-relaxed mb-8 max-w-2xl">
+          Eight clinical programs, two landmark human datasets, $6B in M&amp;A, and one cautionary tale — a complete field intelligence brief on the most important development in cancer immunotherapy since the original CAR-T approval.
+        </p>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-stone-400 border-t border-stone-100 pt-5">
+          <span>Field Intelligence Report</span><span>·</span>
+          <span>April 16, 2026</span><span>·</span>
+          <span>~15 min read</span><span>·</span>
+          <span className="hidden sm:inline">Sources: The Lancet, Blood, Nature, AJMC, OncLive</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function KpiStrip() {
+  const stats = [
+    { num: "8+", label: "Active clinical programs worldwide" },
+    { num: "100%", label: "MRD-neg rate, Kelonia KLN-1010 (n=4, ASH 2025)" },
+    { num: "~$6B", label: "M&A + financing since 2024" },
+    { num: "~10×", label: "Projected cost reduction vs. ex vivo" },
+  ];
+  return (
+    <div className="max-w-3xl mx-auto px-6 mb-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 border border-stone-200 rounded-xl overflow-hidden divide-x divide-y sm:divide-y-0 divide-stone-200">
+        {stats.map((s, i) => (
+          <div key={i} className="bg-stone-50 px-4 py-5 text-center">
+            <div className="text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight leading-none">{s.num}</div>
+            <div className="text-xs text-stone-400 mt-2 leading-snug">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SectionRule() { return <hr className="border-stone-100 my-12" />; }
+
+function SectionHead({ children }) {
+  return <h2 className="font-serif text-2xl sm:text-3xl font-semibold text-stone-900 mb-4">{children}</h2>;
+}
+
+function Pullquote({ quote, cite }) {
+  return (
+    <blockquote className="border-l-[3px] border-stone-900 pl-7 my-10">
+      <p className="font-serif text-xl text-stone-800 italic leading-relaxed">{quote}</p>
+      <cite className="block text-xs text-stone-400 not-italic mt-3">{cite}</cite>
+    </blockquote>
+  );
+}
+
+const CALLOUT_CFG = {
+  green: { bg: "bg-emerald-50", border: "#059669", label: "text-emerald-600", body: "text-emerald-800" },
+  blue:  { bg: "bg-blue-50",    border: "#2563eb", label: "text-blue-600",    body: "text-blue-800"  },
+  amber: { bg: "bg-amber-50",   border: "#d97706", label: "text-amber-600",   body: "text-amber-800" },
+  red:   { bg: "bg-red-50",     border: "#dc2626", label: "text-red-600",     body: "text-red-800"   },
+};
+
+function Callout({ color, label, children }) {
+  const c = CALLOUT_CFG[color];
+  return (
+    <div className={`rounded-r-lg px-5 py-4 my-6 border-l-[3px] ${c.bg}`} style={{ borderLeftColor: c.border }}>
+      <div className={`text-[10px] font-bold tracking-widest uppercase mb-2 ${c.label}`}>{label}</div>
+      <div className={`text-[15px] leading-relaxed ${c.body}`}>{children}</div>
+    </div>
+  );
+}
+
+function Overview() {
+  return (
+    <section id="overview" className="max-w-3xl mx-auto px-6 pt-10">
+      <p className="font-serif text-xl text-stone-800 italic leading-relaxed mb-6">
+        Something extraordinary happened at ASH 2025 in Orlando. An Australian scientist walked to a podium and described an infusion that generates a cancer treatment <em>inside the patient's own body</em> — no cell extraction, no factory, no weeks of waiting. And the cancer disappeared.
+      </p>
+      <p className="text-[18px] text-stone-600 leading-loose mb-5">
+        Traditional CAR T cells require apheresis to harvest a patient's T cells, weeks of GMP manufacturing to engineer and expand them, lymphodepleting chemotherapy to prepare the body, and then infusion — a process costing $400,000–$500,000 per patient, taking 4–6 weeks, and accessible to <strong className="text-stone-800 font-semibold">fewer than 60% of referred patients</strong>. In vivo CAR T eliminates that entire chain by delivering the CAR transgene directly into circulating T cells <em>inside the body</em>, using either viral vectors or lipid nanoparticles.
+      </p>
+      <KpiStrip />
+      <SectionRule />
+      <SectionHead>Why now? The access crisis that forced innovation</SectionHead>
+      <p className="text-[18px] text-stone-600 leading-loose mb-5">
+        A 2024 McKesson report found that millions of Americans in rural areas live in "CAR T deserts" — more than two-thirds of oncologists lack nearby access to administer the therapy. A Memorial Sloan Kettering study found that Black patients were statistically less likely to receive CAR T, exposing a layer of structural inequity beyond mere geography.
+      </p>
+      <p className="text-[18px] text-stone-600 leading-loose mb-5">
+        Even for patients who can access major academic centers, the manufacturing bottleneck is ruthless. Disease progresses while the factory runs. Some patients deteriorate past eligibility before their cells return.
+      </p>
+      <Pullquote
+        quote="By engineering immune cells directly within the body, the patient becomes their own factory. It dramatically accelerates the process and is significantly more cost-effective."
+        cite="— Jean-Pierre Latere, PhD, CEO, EsoBiotec (now AstraZeneca)"
+      />
+      <p className="text-[18px] text-stone-600 leading-loose">
+        In vivo CAR T was proposed as the solution more than a decade ago. The science took time to catch up. Now — with two independent programs showing complete responses in humans, three mega-acquisitions, and eight programs in or entering clinical trials — the field has crossed a threshold.
+      </p>
+    </section>
+  );
+}
+
+function PlatformCard({ num, title, desc, tags, players }) {
+  return (
+    <div className="bg-stone-50 border border-stone-200 rounded-xl p-5">
+      <div className="flex items-start gap-2 mb-3">
+        <span className="text-blue-600 font-bold text-sm mt-0.5">{num}</span>
+        <h4 className="font-semibold text-stone-900 text-sm leading-snug">{title}</h4>
+      </div>
+      <p className="text-sm text-stone-500 leading-relaxed mb-3">{desc}</p>
+      <div className="flex flex-wrap gap-1.5 mb-2">
+        {tags.map(t => (
+          <span key={t} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-white border border-stone-200 text-stone-500">{t}</span>
+        ))}
+      </div>
+      {players && <p className="text-[11px] text-stone-400 mt-2">{players}</p>}
+    </div>
+  );
+}
+
+function Platforms() {
+  return (
+    <section id="platforms" className="max-w-3xl mx-auto px-6">
+      <SectionRule />
+      <SectionHead>The delivery platform landscape: four distinct bets</SectionHead>
+      <p className="text-[18px] text-stone-600 leading-loose mb-6">
+        There is no single "in vivo CAR T." Four distinct technological approaches are competing, with very different risk and reward profiles.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <PlatformCard num="①" title="Lentiviral vectors (LVV)"
+          desc="Stable, durable CAR expression via genomic integration. T-cell selectivity achieved through anti-CD3 or anti-CD8 nanobody-modified envelopes, or fusogen-based targeting. The approach currently generating the most convincing clinical data."
+          tags={["Durable expression","Stable integration","Single dose"]}
+          players="Key players: Kelonia, EsoBiotec/AZ, Umoja, Interius, Genocury, Vyriad" />
+        <PlatformCard num="②" title="LNP-mRNA (non-viral)"
+          desc="Transient CAR expression lasting hours to days. Targeted LNPs use anti-CD4/CD8/CD5 antibody conjugation for T-cell selectivity. Tunable, repeatable dosing model; no insertional risk; lower CRS profile expected."
+          tags={["Reversible expression","Repeat dosing","No integration"]}
+          players="Key players: Capstan/AbbVie, Orna/Lilly, Myeloid/CREATE, Sanofi" />
+        <PlatformCard num="③" title="CRISPR / AAV HDR (next-gen)"
+          desc="Site-specific integration at the TRAC locus via CRISPR-Cas9 + AAV HDR. Avoids random integration; enables physiological CAR expression. A Nature paper (March 2026) demonstrated in vivo TRAC-targeted CAR generation in mice."
+          tags={["Site-specific","Preclinical only","Highly precise"]} />
+        <PlatformCard num="④" title="Circular RNA / oRNA"
+          desc="Orna Therapeutics' proprietary oRNA platform delivers circular RNA payloads with improved stability versus linear mRNA. Their panCAR concept targets T cells, NK cells, and myeloid cells simultaneously. Acquired by Eli Lilly for up to $2.4B in February 2026."
+          tags={["Circular RNA","panCAR multi-cell","Preclinical"]} />
+      </div>
+    </section>
+  );
+}
+
+const BADGE_STYLE = {
+  green: "bg-emerald-50 text-emerald-700 border-emerald-300",
+  blue:  "bg-blue-50  text-blue-700  border-blue-300",
+  amber: "bg-amber-50 text-amber-700 border-amber-300",
+};
+
+function ProgramCard({ name, sub, badge, badgeColor, tech, result, details, cite }) {
+  const resBg = { green: "bg-emerald-50 text-emerald-800", amber: "bg-amber-50 text-amber-800" };
+  return (
+    <div className="border border-stone-200 rounded-xl overflow-hidden bg-white">
+      <div className="px-5 py-4 border-b border-stone-100 flex items-start justify-between gap-3">
+        <div>
+          <div className="font-semibold text-stone-900 text-[15px]">{name}</div>
+          <div className="text-xs text-stone-400 mt-0.5">{sub}</div>
+        </div>
+        <span className={`text-[10px] font-bold tracking-wide uppercase px-2.5 py-1 rounded-full border whitespace-nowrap shrink-0 ${BADGE_STYLE[badgeColor]}`}>{badge}</span>
+      </div>
+      <div className="px-5 py-4 space-y-3">
+        <p className="text-sm text-stone-600 leading-relaxed"><strong className="text-stone-800">Technology:</strong> {tech}</p>
+        {result && (
+          <div className={`rounded-lg px-4 py-3 text-sm leading-relaxed ${resBg[result.color || "green"]}`}>
+            <strong>{result.label}:</strong> {result.text}
+          </div>
+        )}
+        <p className="text-sm text-stone-600 leading-relaxed">{details}</p>
+        <p className="text-[11px] text-stone-400 italic border-t border-stone-100 pt-3">{cite}</p>
+      </div>
+    </div>
+  );
+}
+
+function Programs() {
+  return (
+    <section id="programs" className="max-w-3xl mx-auto px-6">
+      <SectionRule />
+      <SectionHead>The clinical programs: a complete map</SectionHead>
+      <p className="text-[18px] text-stone-600 leading-loose mb-6">
+        In vivo CAR T is only now entering the clinic. Here is every active or recently completed human program, in order of clinical maturity.
+      </p>
+      <div className="space-y-5">
+        <ProgramCard name="Kelonia Therapeutics — KLN-1010"
+          sub="Target: BCMA · Multiple myeloma (R/R) · Phase 1: inMMyCAR (NCT07075185) · Australia & US"
+          badge="Best data to date" badgeColor="green"
+          tech="Third-generation, replication-incompetent SIN lentiviral vector with modified VSV-G fusogen co-expressed with an anti-CD3 antibody — enabling selective transduction of circulating T cells after IV infusion. Uses the proprietary iGPS® (in vivo gene placement system) platform."
+          result={{ label:"ASH 2025 (Dec 9, Late-Breaking Oral)", color:"green",
+            text:"100% MRD-negative response rate in all 4 patients. Complete response was the best overall response. All remain in response at up to 5 months follow-up. No CRS grade ≥3 and no ICANS. CAR-T expansion peaked ~day 15; memory-phenotype T cells persisted through month 3. No lymphodepleting chemotherapy required." }}
+          details="Trial designed to enroll up to 40 patients. Strategic collaboration with Johnson & Johnson for novel in vivo CAR-T discovery, and US IND clearance enabling expansion to American sites."
+          cite="📄 Harrison S, Ho PJ et al. Blood 2025;146(Suppl 2):LBA-1 · Kelonia press release Dec 9, 2025 · OncLive Dec 2025" />
+
+        <ProgramCard name="EsoBiotec (AstraZeneca) — ESO-T01"
+          sub="Target: BCMA · Multiple myeloma (R/R) · Phase 1: NCT06691685 · China (Wuhan)"
+          badge="First Lancet data" badgeColor="green"
+          tech="Nanobody-targeted, immune-shielded lentiviral vector (ENaBL platform). T cell–specific synthetic promoter, MHC class-I knocked out to mitigate immunogenicity, phagocytosis-resistant shielding. Single IV infusion under 10 minutes, no lymphodepletion required."
+          result={{ label:"The Lancet (July 2, 2025)", color:"green",
+            text:"4 patients at the lowest dose — 2 stringent complete responses, 2 partial responses. All 4 MRD-negative by day 28. Updated April 2026: 4/5 responses including 3 sCRs, MRD-negativity at 10⁻⁵ sensitivity in all evaluable responders by day 60." }}
+          details="AstraZeneca acquired EsoBiotec for $425M upfront + up to $575M in milestones (~$1B total) in March 2025. Cost of goods may be approximately one order of magnitude lower than ex vivo CAR T."
+          cite="📄 Xu J et al. Lancet 2025;406:228–231 · AstraZeneca acquisition press release Mar 17, 2025" />
+
+        <ProgramCard name="Interius BioTherapeutics — INT2104"
+          sub="Target: CD20 · B-cell malignancies (R/R) · Phase 1: INVISE · Australia & Germany"
+          badge="First-ever in vivo CAR trial" badgeColor="blue"
+          tech="Lentiviral vector targeted at CD7+ T cells and NK cells, generating both CAR-T cells and CAR-NK cells simultaneously in vivo — a mechanistically unique dual approach. First human trial of any in vivo CAR-T globally (TGA clearance, July 2024). Expanded to Germany (Paul Ehrlich Institute approval, January 2025) — first in Europe."
+          details="No clinical efficacy data has been disclosed as of April 2026. The INVISE trial continues to enroll patients across both sites."
+          cite="📄 CGTlive January 2025 · Beacon Intelligence October 2025 · OncologyPipeline July 2024" />
+
+        <ProgramCard name="Umoja Biopharma — UB-VV111 / UB-VV400"
+          sub="CD19 & CD22 · B-cell malignancies · Phase 1 (two assets active)"
+          badge="Phase 1 · Two assets" badgeColor="blue"
+          tech="UB-VV111: Anti-CD19 CAR, Phase 1 (first dosing November 2024). AbbVie holds an option to acquire this asset. UB-VV400: Anti-CD22 CAR, Phase 1 initiated late 2024. Both use Umoja's VivoVec lentiviral platform, deliverable via intranodal or intravenous routes."
+          details="No clinical results disclosed as of April 2026."
+          cite="📄 ApexOnco January 2025 · AJMC July 2025" />
+
+        <ProgramCard name="Capstan Therapeutics (AbbVie) — CPTX2309"
+          sub="CD19 · B-cell autoimmune diseases · Phase 1 · Healthy volunteers · Australia"
+          badge="Phase 1 · mRNA approach" badgeColor="blue"
+          tech="CD8-targeted lipid nanoparticle (tLNP) encoding anti-CD19 CAR mRNA. Produces transient CAR expression; up to 80% of CD8+ T cells expressed CAR in preclinical models with minimal off-target expression. First healthy volunteer dosed June 11, 2025 — the first human to receive a mRNA-LNP in vivo CAR T."
+          details="AbbVie acquired Capstan for $2.1B in June 2024. Earlier investors included Eli Lilly Ventures, BMS, J&J Innovation, and Bayer as part of the $175M Series B in March 2024."
+          cite="📄 Beacon Intelligence October 2025 · AJMC April 2026 · PMC 12885491" />
+
+        <ProgramCard name="Myeloid Therapeutics / CREATE Medicines — MT-302 & MT-303"
+          sub="TROP2 / GPC3 · Breast cancer, liver cancer · Phase 1"
+          badge="Phase 1 · Solid tumors" badgeColor="amber"
+          tech="Non-targeted LNPs delivering mRNA encoding CARs with CD89 signaling for functional expression exclusively in myeloid cells (macrophages/monocytes). MT-303 (GPC3, liver cancer): first patient dosed August 2024. First-in-human in vivo mRNA CAR data for MT-302 presented at ASCO 2025."
+          details="CAR+ monocytes persist up to 48 hours post-injection. A mechanistically distinct approach targeting the innate immune system rather than T cells."
+          cite="📄 Myeloid Therapeutics press release May 30, 2025 · PMC 12885491" />
+
+        <ProgramCard name="Genocury (Shenzhen) — JY231"
+          sub="CD19 · R/R DLBCL · Chinese academic trial · Single case report"
+          badge="Case report · CR in lymphoma" badgeColor="amber"
+          tech="CD3-targeted lentiviral vector delivering anti-CD19 CAR. Included patient apheresis for T-cell co-infusion plus lymphodepletion conditioning. CAR-T expansion peaked in vivo on day 17."
+          result={{ label:"SITC 2024 (Abstract 1482)", color:"amber",
+            text:"Single patient with R/R DLBCL achieved complete remission at 1 month, sustained for more than 3 months. Grade 1 CRS only, no neurotoxicity." }}
+          details="Currently the only documented case report of in vivo CAR T in diffuse large B-cell lymphoma."
+          cite="📄 SITC 2024, Abstract 1482 · MDPI IJMS 2026;27(4):1737" />
+      </div>
+    </section>
+  );
+}
+
+function FailureSection() {
+  return (
+    <section className="max-w-3xl mx-auto px-6">
+      <SectionRule />
+      <SectionHead>Failure stories: what went wrong</SectionHead>
+      <Callout color="red" label="🔴 Cautionary tale — Sana Biotechnology (SG299)">
+        Sana raised $676M in the biggest biotech IPO of 2021 on the promise of its in vivo CAR-T fusogen platform. The program never reached clinical trials, repeatedly slipping from 2022 to 2023. In October 2023, Sana shelved SG299 entirely, laid off 29% of its staff, and pivoted to conventional allogeneic CAR-T. The stock fell approximately <strong>90% from its IPO price</strong>. Key failure factors: insufficient in vivo T-cell transduction efficiency, inability to achieve clinical-grade manufacturing, and severe timeline overconfidence.
+      </Callout>
+      <Callout color="amber" label="⚠️ Ongoing concern — Off-target transduction">
+        In 2018, during ex vivo CAR-T production, a CAR gene was accidentally introduced into malignant B cells — causing antigen masking and relapse. In vivo delivery amplifies this risk because vectors circulate systemically. EsoBiotec addresses this with a T cell–specific synthetic promoter; however, validated safeguards and long-term genotoxicity surveillance remain active priorities across the field.
+      </Callout>
+      <Callout color="amber" label="⚠️ Critical unknown — Durability">
+        The most important open question: how long will in vivo–generated CAR-T cells persist? Kelonia's 5-month and EsoBiotec's 3-month data are promising but insufficient to establish equivalence with ex vivo products, which can yield multi-year remissions. Durability is the <strong>single biggest binary risk factor for the entire field</strong>.
+      </Callout>
+    </section>
+  );
+}
+
+function MASection() {
+  const events = [
+    { date:"February 2026", text:"Eli Lilly → Orna Therapeutics — up to $2.4B including milestones. Focus: autoimmune diseases (anti-CD19 oRNA panCAR). No mention of cancer in the deal rationale." },
+    { date:"June 2024 → Closed June 2025", text:"AbbVie → Capstan Therapeutics — $2.1B. Primary focus: autoimmune disease. AbbVie separately holds an option on Umoja's UB-VV111 for oncology." },
+    { date:"March 2025", text:"AstraZeneca → EsoBiotec — $425M upfront + up to $575M milestones. AZ's entry into in vivo CAR-T, motivated by January 2025 JPM data from a single myeloma patient." },
+    { date:"Late 2024", text:"Novartis → Vyriad — discovery/development partnership; Novartis leads clinical advancement of in vivo CAR-T programs from Vyriad's platform." },
+    { date:"2024", text:"Astellas → Kelonia (strategic collaboration). Johnson & Johnson → Kelonia (discovery collaboration). Roche acquired Capstan's mRNA-LNP platform." },
+    { date:"March 2024", text:"Capstan $175M Series B — oversubscribed. Investors: Eli Lilly Ventures, Bristol Myers Squibb, J&J Innovation, and Bayer — four of the world's largest pharma companies in a single round." },
+  ];
+  return (
+    <section id="mna" className="max-w-3xl mx-auto px-6">
+      <SectionRule />
+      <SectionHead>The M&A frenzy: $6 billion in 18 months</SectionHead>
+      <p className="text-[18px] text-stone-600 leading-loose mb-6">
+        The in vivo CAR-T space has attracted extraordinary pharma interest. Notably, <strong className="text-stone-800">all three mega-deals are primarily motivated by autoimmune disease</strong>, not oncology — reflecting where the easiest regulatory path and largest addressable market may lie.
+      </p>
+      <div className="relative pl-6">
+        <div className="absolute left-[7px] top-2 bottom-2 w-px bg-stone-200" />
+        {events.map((e, i) => (
+          <div key={i} className="relative mb-7">
+            <div className="absolute -left-[21px] top-1.5 w-3 h-3 rounded-full bg-white border-2 border-blue-600" />
+            <div className="text-[11px] font-bold tracking-wider text-blue-600 uppercase mb-1">{e.date}</div>
+            <p className="text-sm text-stone-600 leading-relaxed">{e.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function IndicationsSection() {
+  const cards = [
+    { title:"Hematologic malignancies", note:"Most advanced", items:[
+        "Multiple myeloma via BCMA: Kelonia, EsoBiotec/AZ, Orna, Capstan BCMA program",
+        "B-cell NHL / DLBCL via CD19/CD20: Umoja, Interius, Genocury, Legend Biotech",
+        "AML: explored preclinically via myeloid CAR approaches",
+    ]},
+    { title:"Autoimmune diseases", note:"The mega-deal target", items:[
+        "SLE, RA, myasthenia gravis via CD19 B-cell depletion = 'immune reset'",
+        "Capstan CPTX2309: Phase 1 healthy volunteers since June 2025",
+        "Orna ORN-252: IND filing planned end-2025; FIH expected 2026",
+    ]},
+    { title:"Solid tumors", note:"Hardest; highest risk", items:[
+        "Liver cancer (GPC3): MT-303, first patient August 2024",
+        "Breast cancer (TROP2): MT-302, Phase 1 data at ASCO 2025",
+        "TME, antigen escape, and trafficking barriers remain major obstacles",
+    ]},
+    { title:"Frontier / exploratory", note:"Emerging areas", items:[
+        "Infectious diseases: preclinical exploration of CAR-T for HIV",
+        "Fibrosis: CAR-T against fibroblast activation protein (FAP)",
+        "CAR-NK and CAR-myeloid as complements to T cell–targeting approaches",
+    ]},
+  ];
+  return (
+    <section className="max-w-3xl mx-auto px-6">
+      <SectionRule />
+      <SectionHead>Target indications: where the programs are pointing</SectionHead>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {cards.map((c, i) => (
+          <div key={i} className="border border-stone-200 rounded-xl p-5">
+            <div className="flex items-center justify-between mb-3 pb-3 border-b border-stone-100">
+              <h4 className="font-semibold text-stone-900 text-sm">{c.title}</h4>
+              <span className="text-[10px] text-stone-400 italic ml-2 shrink-0">{c.note}</span>
+            </div>
+            <ul className="space-y-2">
+              {c.items.map((item, j) => (
+                <li key={j} className="flex gap-2 text-sm text-stone-500 leading-relaxed">
+                  <span className="text-stone-300 mt-0.5 shrink-0">—</span>{item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Scorecard() {
+  return (
+    <section id="scorecard" className="max-w-3xl mx-auto px-6">
+      <SectionRule />
+      <SectionHead>What works vs. what doesn't: an honest scorecard</SectionHead>
+      <Callout color="green" label="✓ What is working">
+        <strong>Lentiviral vectors with T-cell–specific tropism can generate functional, expanding, memory CAR-T cells in vivo without lymphodepletion.</strong> MRD-negative responses have been demonstrated in multiple myeloma by two independent programs. Off-the-shelf administration eliminates the apheresis wait time. No grade ≥3 CRS and no ICANS in Kelonia's cohort. CAR-T expansion and persistence are comparable to ex vivo products in early follow-up. Cost of goods is projected at approximately 10× lower than ex vivo therapy.
+      </Callout>
+      <Callout color="amber" label="⚠ What remains unproven">
+        <strong>Durability beyond 5 months.</strong> Efficacy in earlier-line patients or those with exhausted T-cell repertoires. LNP-mRNA CAR efficacy in any patient (only healthy volunteers so far). Solid tumor responses — TME barriers largely unresolved. Insertional mutagenesis risk with LVV at scale. Development of anti-drug antibodies with repeat LNP dosing. Immune reconstitution dynamics after in vivo–mediated B-cell depletion.
+      </Callout>
+    </section>
+  );
+}
+
+function LeadersSection() {
+  const clinical = [
+    { name:"Prof. Joy Ho", role:"Royal Prince Alfred / Peter MacCallum Cancer Centre", note:"Lead investigator, inMMyCAR / KLN-1010, ASH 2025 presenter" },
+    { name:"Prof. Simon Harrison", role:"Peter MacCallum Cancer Centre", note:"Co-investigator, inMMyCAR; leading Australian myeloma clinician" },
+    { name:"Michael Rosenzweig, MD", role:"City of Hope", note:"Division Chief, Multiple Myeloma; leading voice on durability and access" },
+  ];
+  const industry = [
+    { name:"Kevin Friedman, PhD", role:"Kelonia, CEO/Founder", note:"iGPS® platform lead" },
+    { name:"Jean-Pierre Latere, PhD", role:"EsoBiotec/AZ, CEO", note:"ENaBL platform; drove JPM-to-AZ-acquisition trajectory" },
+    { name:"Adrian Bot, PhD", role:"Capstan/AbbVie, CSO & EVP R&D", note:"Leading mRNA-LNP in vivo advocate" },
+    { name:"Joseph Bolen, PhD", role:"Orna/Lilly, CEO", note:"oRNA / panCAR platform; drove Lilly $2.4B deal" },
+    { name:"Stephen Russell, MD", role:"Vyriad, CEO", note:"Retargeting strategies, Novartis partnership lead" },
+  ];
+  return (
+    <section className="max-w-3xl mx-auto px-6">
+      <SectionRule />
+      <SectionHead>Thought leaders shaping this field</SectionHead>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {[{ title:"Clinical & Academic", people: clinical }, { title:"Industry & Scientific", people: industry }].map((group, gi) => (
+          <div key={gi} className="bg-stone-50 rounded-xl p-5">
+            <h4 className="text-[11px] font-bold tracking-widest uppercase text-stone-400 mb-4">{group.title}</h4>
+            <div className="space-y-3">
+              {group.people.map((l, i) => (
+                <div key={i} className="pb-3 border-b border-stone-200 last:border-0 last:pb-0">
+                  <div className="font-semibold text-stone-800 text-sm">{l.name}</div>
+                  <div className="text-xs text-stone-400">{l.role}</div>
+                  <div className="text-xs text-stone-500 mt-0.5">{l.note}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function BreakthroughSection() {
+  return (
+    <section className="max-w-3xl mx-auto px-6">
+      <SectionRule />
+      <SectionHead>The breakthrough science (for the technically curious)</SectionHead>
+      <p className="text-[18px] text-stone-600 leading-loose mb-5">
+        A March 2026 <em>Nature</em> paper introduced a genuinely new concept: in vivo <em>site-specific</em> CAR integration using a two-vector system. The first vector delivers CRISPR-Cas9 ribonucleoprotein as an enveloped delivery vehicle; the second delivers an AAV containing a CAR donor template for homology-directed repair at the TRAC locus.
+      </p>
+      <p className="text-[18px] text-stone-600 leading-loose">
+        This approach is currently preclinical-only, but it represents the logical endpoint of the in vivo CAR-T trajectory: not just any integration anywhere in the genome, but <em>exactly the right gene, in exactly the right place, in exactly the right cell</em> — achieved by a medicine you inject.
+      </p>
+    </section>
+  );
+}
+
+function Takeaways() {
+  const items = [
+    { audience:"Biopharma / BD teams", text:"The LVV-based clinical results validate the core hypothesis. The window to access best-in-class platforms is narrowing — three of the top five LVV players are now partnered or acquired. Autoimmune disease is where the mega-deals are going. LNP-mRNA CAR is still pre–proof-of-concept in patients — Capstan's healthy volunteer data (expected 2026) is the critical read-through for Lilly's and AbbVie's autoimmune bets." },
+    { audience:"Clinical / research teams", text:"Design durability readouts into all Phase 1 protocols — 6-month and 12-month MRD and PFS are the critical endpoints. T-cell fitness at the time of infusion matters; patients with exhausted repertoires from heavy prior treatment may underperform. Off-target transduction monitoring should be a standard safety biomarker in all trials." },
+    { audience:"Investors", text:"The Sana failure proved that preclinical promise ≠ clinical translatability. The current wave (Kelonia, EsoBiotec) has actual human data. The durability question is the single biggest binary risk. Monitor 6-month and 12-month follow-up data expected in H2 2026. Remaining independent pure-plays: Kelonia Therapeutics and Umoja Biopharma." },
+  ];
+  return (
+    <section id="takeaways" className="max-w-3xl mx-auto px-6">
+      <SectionRule />
+      <SectionHead>Actionable takeaways for different audiences</SectionHead>
+      <div className="space-y-4 mb-8">
+        {items.map((t, i) => (
+          <div key={i} className="border border-stone-200 rounded-xl p-5">
+            <div className="text-[11px] font-bold tracking-widest uppercase text-blue-600 mb-2">For {t.audience}</div>
+            <p className="text-sm text-stone-600 leading-relaxed">{t.text}</p>
+          </div>
+        ))}
+      </div>
+      <Callout color="blue" label="The bottom line">
+        In vivo CAR T has crossed from hypothesis to proof-of-concept in humans. Two independent programs have now shown MRD-negative responses in multiple myeloma without lymphodepletion, at a fraction of the cost and complexity of conventional CAR T. The field is not there yet — but the 2025–2026 data wave has firmly established that reprogramming T cells from the inside is not science fiction. <strong>It is clinical medicine in its earliest, most exciting stage.</strong>
+      </Callout>
+    </section>
+  );
+}
+
+function References() {
+  const refs = [
+    { badge:"Lancet 2025", color:"green", text:'Xu J, Li L, Piao P et al. "In-vivo B-cell maturation antigen CAR T-cell therapy for relapsed or refractory multiple myeloma." The Lancet 2025;406:228–231. doi:10.1016/S0140-6736(25)01030-X' },
+    { badge:"Blood 2025", color:"green", text:'Harrison S, Ho PJ, Lim S-L et al. "MRD-negative outcomes following a novel, in vivo gene therapy generating anti-BCMA CAR-T cells in RRMM: inMMyCAR Phase 1 (KLN-1010)." Blood 2025;146(Suppl 2):LBA-1.' },
+    { badge:"Nature 2026", color:"blue", text:'"In vivo site-specific engineering to reprogram T cells." Nature 2026. Two-vector CRISPR/AAV HDR system for in vivo TRAC-targeted CAR integration.' },
+    { badge:"MDPI 2026", color:"blue", text:'"In Vivo CAR-T Therapies — A New Era of Programmable Immunity." Int J Mol Sci 2026;27(4):1737. Comprehensive landscape review.' },
+    { badge:"eBioMedicine 2024", color:"amber", text:'Bui T-H et al. "Advancements and challenges in developing in vivo CAR T-cell therapies." eBioMedicine 2024.' },
+    { badge:"PMC 2025", color:"amber", text:'"In vivo CAR-T cell therapy: New breakthroughs for cell-based tumor immunotherapy." PMC12427527.' },
+    { badge:"Press releases", color:"gray", text:"Kelonia Therapeutics (Dec 9, 2025) · EsoBiotec (Jan 8, 2024) · AstraZeneca (Mar 17, 2025) · Orna Therapeutics ASH 2025 (Dec 7, 2025) · Capstan $175M Series B (Mar 20, 2024) · Umoja Biopharma (2024–2025)" },
+    { badge:"Analysis", color:"gray", text:'AJMC: "How In Vivo CAR T-Cell Therapies Could Rewrite the Cancer Care Playbook" (Apr 2026) · OncLive: "Early Data Show Deep MRD-Negative Responses with KLN-1010" (Dec 2025) · CancerNetwork (Apr 2026)' },
+  ];
+  const badgeStyle = {
+    green:"bg-emerald-50 text-emerald-700",
+    blue:"bg-blue-50 text-blue-700",
+    amber:"bg-amber-50 text-amber-700",
+    gray:"bg-stone-100 text-stone-500",
+  };
+  return (
+    <section className="max-w-3xl mx-auto px-6">
+      <SectionRule />
+      <div className="border-t-2 border-stone-900 pt-8">
+        <h2 className="text-[11px] font-bold tracking-widest uppercase text-stone-400 mb-5">References &amp; Primary Sources</h2>
+        <div className="space-y-3">
+          {refs.map((r, i) => (
+            <div key={i} className="flex gap-3 items-start">
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded shrink-0 mt-0.5 ${badgeStyle[r.color]}`}>{r.badge}</span>
+              <p className="text-xs text-stone-500 leading-relaxed">{r.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="max-w-3xl mx-auto px-6 py-12">
+      <div className="border-t border-stone-200 pt-6">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-5 h-5 rounded bg-blue-700 flex items-center justify-center">
+            <span className="text-white font-bold text-[9px]">Φ</span>
+          </div>
+          <span className="font-semibold text-stone-600 text-xs">Phenomics · Field Intelligence</span>
+        </div>
+        <p className="text-xs text-stone-400 leading-relaxed">
+          This report synthesizes publicly available data from peer-reviewed journals, conference presentations, and company communications as of April 16, 2026. All clinical results are preliminary, from small patient cohorts, and subject to change. Nothing herein constitutes investment advice or clinical guidance. All drug candidates discussed are investigational and have not been approved by any regulatory authority.
+        </p>
+      </div>
+    </footer>
+  );
+}
+
+function App() {
+  return (
+    <div className="bg-white min-h-screen font-sans antialiased">
+      <Navbar />
+      <Hero />
+      <Overview />
+      <Platforms />
+      <Programs />
+      <FailureSection />
+      <MASection />
+      <IndicationsSection />
+      <Scorecard />
+      <LeadersSection />
+      <BreakthroughSection />
+      <Takeaways />
+      <References />
+      <Footer />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
