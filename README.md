@@ -32,8 +32,9 @@ This repository is configured for **Cloudflare Workers static assets** deploymen
 pnpm deploy:cloudflare
 ```
 
-The deploy script builds the app and runs `wrangler deploy`.
+The deploy script runs `wrangler deploy`, which executes the custom Wrangler build command.
 
 ### Notes
 
-- `wrangler.toml` runs the Vite build and uploads the `dist` folder as Worker assets with explicit `html_handling`/`not_found_handling` set to `none` to avoid implicit redirect generation.
+- the build script force-cleans `dist` and deletes any stray `dist/_redirects` / `dist/_headers` files before upload to prevent Cloudflare redirect validation failures.
+- `wrangler.toml` runs the build and uploads the `dist` folder as Worker assets with explicit `html_handling`/`not_found_handling` set to `none` to avoid implicit redirect generation.

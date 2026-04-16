@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "rm -rf dist && vite build && rm -f dist/_redirects dist/_headers",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy:cloudflare": "pnpm build && npx wrangler deploy"
+    "deploy:cloudflare": "npx wrangler deploy"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
